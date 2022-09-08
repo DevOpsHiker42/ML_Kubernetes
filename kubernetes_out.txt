@@ -1,0 +1,7 @@
+$ ./run_kubernetes.sh
+pod/boston-housing created
+NAME             READY   STATUS              RESTARTS   AGE
+boston-housing   0/1     ContainerCreating   0          0s
+pod/boston-housing condition met
+Forwarding from 127.0.0.1:8000 -> 80
+Forwarding from [::1]:8000 -> 80
