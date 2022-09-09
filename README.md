@@ -34,12 +34,24 @@ To make a prediction, run the following in a separate terminal window:
 * Make sure that Docker is running
 * Start a local minikube cluster *e.g.* using `minikube start`
 * Run `./run_kubernetes.sh`
-* Once the cluster is up and running, you will see information about the running pod and app similar to that in the example output file ``kubernetes_out.txt``
+* Once the cluster is up and running, you will see information about the running pod and app *e.g.*
+
+<pre style="margin-left: 50px;">
+pod/boston-housing created
+NAME             READY   STATUS              RESTARTS   AGE
+boston-housing   0/1     ContainerCreating   0          0s
+pod/boston-housing condition met
+Forwarding from 127.0.0.1:8000 -> 80
+Forwarding from [::1]:8000 -> 80
+</pre>
+
 * Stop the app when you are done, using `ctrl-c`
 
 To make a prediction, run the following in a separate terminal window:
 
 `./make_prediction.sh`
+
+To see the output (STDOUT) from the pod, you'll need to use the following command: `kubectl logs boston-housing`
 
 When you are finished with the minikube cluster, clean up *e.g.* using `minikube delete`.
 
