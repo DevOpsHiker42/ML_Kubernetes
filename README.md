@@ -1,50 +1,66 @@
-<include a CircleCI status badge, here>
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/DevOpsHiker42/ML_Kubernetes/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/DevOpsHiker42/ML_Kubernetes/tree/master)  on branch: master
 
-## Project Overview
+## Project Summary
+This project demonstrates the operationalization of a machine learning microservice using [kubernetes](https://kubernetes.io/).
+The microservice (written in Python Flask) runs a pre-trained ``sklearn`` model (see [https://www.kaggle.com/c/boston-housing](https://www.kaggle.com/c/boston-housing)) that predicts housing prices in Boston according to several features, such as average rooms in a home, highway access data, teacher-to-pupil ratios etc. Predictions are issued in response to API calls.
 
-In this project, you will apply the skills you have acquired in this course to operationalize a Machine Learning Microservice API. 
+## How to Run the Web App
 
-You are given a pre-trained, `sklearn` model that has been trained to predict housing prices in Boston according to several features, such as average rooms in a home and data about highway access, teacher-to-pupil ratios, and so on. You can read more about the data, which was initially taken from Kaggle, on [the data source site](https://www.kaggle.com/c/boston-housing). This project tests your ability to operationalize a Python flask app—in a provided file, `app.py`—that serves out predictions (inference) about housing prices through API calls. This project could be extended to any pre-trained machine learning model, such as those for image recognition and data labeling.
-
-### Project Tasks
-
-Your project goal is to operationalize this working, machine learning microservice using [kubernetes](https://kubernetes.io/), which is an open-source system for automating the management of containerized applications. In this project you will:
-* Test your project code using linting
-* Complete a Dockerfile to containerize this application
-* Deploy your containerized application using Docker and make a prediction
-* Improve the log statements in the source code for this application
-* Configure Kubernetes and create a Kubernetes cluster
-* Deploy a container using Kubernetes and make a prediction
-* Upload a complete Github repo with CircleCI to indicate that your code has been tested
-
-You can find a detailed [project rubric, here](https://review.udacity.com/#!/rubrics/2576/view).
-
-**The final implementation of the project will showcase your abilities to operationalize production microservices.**
-
----
-
-## Setup the Environment
-
-* Create a virtualenv with Python 3.7 and activate it. Refer to this link for help on specifying the Python version in the virtualenv. 
-```bash
-python3 -m pip install --user virtualenv
-# You should have Python 3.7 available in your host. 
-# Check the Python path using `which python3`
-# Use a command similar to this one:
-python3 -m virtualenv --python=<path-to-Python3.7> .devops
-source .devops/bin/activate
-```
+### 1. Run in Standalone Python
+* Run `make setup` to create and activate a Python virtual environment: ~/.devops
 * Run `make install` to install the necessary dependencies
+* Run the app using `python app.py`
+* Stop the app when you are done, using `ctrl-c`
 
-### Running `app.py`
+The app needs to be run using Python 3.7
+On a system with multiple Python versions installed, it may be necessary to modify Makefile (see example in ``Makefile_Python3.7.txt``), and run the app using `python3.7 app.py`
 
-1. Standalone:  `python app.py`
-2. Run in Docker:  `./run_docker.sh`
-3. Run in Kubernetes:  `./run_kubernetes.sh`
+To make a prediction (the app must be running), run the following in a separate terminal window:
 
-### Kubernetes Steps
+`./make_prediction.sh 80`
 
-* Setup and Configure Docker locally
-* Setup and Configure Kubernetes locally
-* Create Flask app in Container
-* Run via kubectl
+Note that port 80 is specified to the script via an optional command line argument - without this, the script defaults to port 8000.
+
+### 2. Run in Docker
+* Make sure that Docker is running
+* Run `./run_docker.sh`
+* Stop the app when you are done, using `ctrl-c`
+
+To make a prediction, run the following in a separate terminal window:
+
+`./make_prediction.sh`
+
+### 3. Run in Kubernetes using minikube
+* Make sure that Docker is running
+* Start a local minikube cluster *e.g.* using `minikube start`
+* Run `./run_kubernetes.sh`
+* Once the cluster is up and running, you will see information about the running pod and app similar to that in the example output file ``kubernetes_out.txt``
+* Stop the app when you are done, using `ctrl-c`
+
+To make a prediction, run the following in a separate terminal window:
+
+`./make_prediction.sh`
+
+When you are finished with the minikube cluster, clean up *e.g.* using `minikube delete`.
+
+## Overview of Repository Files
+
+| **Subdirectory** | **File**                         | **Description**                                                 |
+|------------------|----------------------------------|-----------------------------------------------------------------|
+|                  | Dockerfile                       | Template file containing instructions for building Docker image |
+|                  | Makefile                         | File containing instructions for UNIX ``make`` utility          |
+|                  | Makefile_Python3.7.txt           | Example of how to specify Python3.7 in Makefile                 |
+|                  | README.md                        | *This file*                                                     |
+|                  | app.py                           | Python Flask application for running model                      |
+|                  | make_prediction.sh               | BASH script for issuing API call to request a prediction        |
+|                  | requirements.txt                 | List of Python dependencies required by app.py                  |
+|                  | run_docker.sh                    | Script for running app.py via Docker                            |
+|                  | run_kubernetes.sh                | Script for running app.py via Kubernetes (minikube)             |
+|                  | upload_docker.sh                 | Script for uploading Docker image to Docker Hub                 |
+| .circleci        | config.yml                       | CircleCI configuration (YAML) file                              |
+| model_data       | boston_housing_prediction.joblib | *Model data*                                                    |
+| model_data       | housing.csv                      | *Model data*                                                    |
+| output_txt_files | docker_out.txt                   | Sample output from running app.py via Docker                    |
+| output_txt_files | kubernetes_out.txt               | Sample output from running app.py via Kubernetes (minikube)     |
+
+<End of README>
